@@ -1,0 +1,92 @@
+model:
+  backbone: "efficientnet_b3"       # efficientnet_b3 | resnet50 | vit_b_16
+  pretrained: true
+  pretrained_weights: "IMAGENET1K_V1"
+  output_dim: 512                   # embedding dimension
+  dropout: 0.3
+
+  # Quality ranker head
+  quality_head:
+    enabled: true
+    layers: [256, 128, 1]
+    activation: "relu"
+
+  # Attribute classifier head (CelebA-style)
+  attribute_head:
+    enabled: false
+    num_classes: 40                 # CelebA attributes
+    layers: [256, 40]
+
+training:
+  task: "quality_ranking"           # quality_ranking | attribute_classification | both
+  epochs: 50
+  batch_size: 32
+  num_workers: 4
+  pin_memory: true
+
+  optimizer:
+    type: "adamw"
+    lr: 1.0e-4
+    weight_decay: 0.01
+    betas: [0.9, 0.999]
+
+  scheduler:
+    type: "cosine_annealing"
+    T_max: 50
+    eta_min: 1.0e-6
+    warmup_epochs: 5
+
+  loss:
+    quality_loss: "mse"             # mse | huber | rank_loss
+    attribute_loss: "bce"
+    quality_weight: 1.0
+    attribute_weight: 0.5
+
+  augmentation:
+    random_horizontal_flip: 0.5
+    random_rotation: 15
+    color_jitter:
+      brightness: 0.2
+      contrast: 0.2
+      saturation: 0.1
+      hue: 0.05
+    random_grayscale: 0.05
+    normalize:
+      mean: [0.485, 0.456, 0.406]
+      std: [0.229, 0.224, 0.225]
+
+data:
+  image_size: 224
+  crop_size: 224
+  val_size: 0.1
+  test_size: 0.1
+  seed: 42
+
+checkpointing:
+  save_dir: "artifacts/checkpoints"
+  save_every_n_epochs: 5
+  keep_top_k: 3
+  monitor: "val/quality_loss"
+  mode: "min"
+
+logging:
+  tensorboard: true
+  log_dir: "artifacts/runs"
+  log_every_n_steps: 50
+  save_images_every_n_epochs: 10
+
+hardware:
+  device: "auto"                    # auto | cpu | cuda | mps
+  mixed_precision: true
+  compile: false                    # torch.compile (requires PyTorch 2.0+)
+
+# Fine-tuning config (Stable Diffusion LoRA — modular, separate step)
+lora_finetune:
+  enabled: false                    # Enable after quality pipeline is built
+  base_model: "runwayml/stable-diffusion-v1-5"
+  rank: 16
+  alpha: 32
+  target_modules: ["q_proj", "v_proj", "k_proj", "out_proj"]
+  learning_rate: 1.0e-4
+  max_train_steps: 1000
+  gradient_checkpointing: true

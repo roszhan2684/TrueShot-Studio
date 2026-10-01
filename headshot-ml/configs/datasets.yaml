@@ -1,0 +1,127 @@
+datasets:
+
+  - name: sfhq
+    display_name: "Synthetic Faces High Quality (SFHQ)"
+    source_url: "https://huggingface.co/datasets/SelfishMachines/SFHQ"
+    license: "CC0-1.0"
+    commercial_use_allowed: true
+    redistribution_allowed: true
+    allowed_for_download: true
+    downloader_type: huggingface
+    hf_repo_id: "SelfishMachines/SFHQ"
+    hf_split: "train"
+    expected_format: "parquet+images"
+    local_target_dir: "data/raw/sfhq"
+    expected_count: 90000
+    image_size: 1024
+    usage_notes: >
+      Public domain synthetic faces. Safe for commercial training.
+      Primary recommended dataset. Download with huggingface-hub.
+
+  - name: ffhq
+    display_name: "Flickr-Faces-HQ (FFHQ)"
+    source_url: "https://github.com/NVlabs/ffhq-dataset"
+    license: "CC-BY-NC-SA-4.0"
+    commercial_use_allowed: false
+    redistribution_allowed: false
+    allowed_for_download: false
+    downloader_type: manual
+    manual_instructions: >
+      1. Visit https://github.com/NVlabs/ffhq-dataset
+      2. Accept the terms of use
+      3. Download using the official download_ffhq.py script
+      4. Place images in data/raw/ffhq/images/
+      5. Run: python scripts/fetch_datasets.py --dataset ffhq --manual-confirm
+    expected_format: "png (1024x1024)"
+    local_target_dir: "data/raw/ffhq"
+    expected_count: 70000
+    image_size: 1024
+    usage_notes: >
+      Non-commercial only. Requires NVIDIA ToU acceptance.
+      Best quality dataset for research fine-tuning.
+      MANUAL_REVIEW_REQUIRED before enabling.
+
+  - name: celeba
+    display_name: "CelebFaces Attributes (CelebA)"
+    source_url: "https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html"
+    license: "Non-commercial research only"
+    commercial_use_allowed: false
+    redistribution_allowed: false
+    allowed_for_download: false
+    downloader_type: manual
+    manual_instructions: >
+      1. Visit https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html
+      2. Accept the research use agreement
+      3. Download img_align_celeba.zip from Google Drive
+      4. Place in data/raw/celeba/img_align_celeba/
+      5. Download list_attr_celeba.txt to data/raw/celeba/
+    expected_format: "jpg (218x178 aligned)"
+    local_target_dir: "data/raw/celeba"
+    expected_count: 202599
+    attribute_file: "list_attr_celeba.txt"
+    usage_notes: >
+      Research only. 40 binary attribute labels per image.
+      Good for attribute-conditioned training experiments.
+      MANUAL_REVIEW_REQUIRED.
+
+  - name: utkface
+    display_name: "UTKFace Large Scale Face Dataset"
+    source_url: "https://susanqq.github.io/UTKFace/"
+    license: "Research use only"
+    commercial_use_allowed: false
+    redistribution_allowed: false
+    allowed_for_download: false
+    downloader_type: manual
+    manual_instructions: >
+      1. Visit https://susanqq.github.io/UTKFace/
+      2. Download the aligned&cropped images zip
+      3. Place in data/raw/utkface/
+      4. Filename format: age_gender_race_date.jpg
+    expected_format: "jpg (200x200)"
+    local_target_dir: "data/raw/utkface"
+    expected_count: 23000
+    filename_metadata: "age_gender_race_date"
+    usage_notes: >
+      Research only. Diverse age/gender/ethnicity labels.
+      Good for diversity evaluation and demographic balance checks.
+      MANUAL_REVIEW_REQUIRED.
+
+  - name: lfw
+    display_name: "Labelled Faces in the Wild (LFW)"
+    source_url: "http://vis-www.cs.umass.edu/lfw/"
+    license: "Unspecified (research implied)"
+    commercial_use_allowed: false
+    redistribution_allowed: false
+    allowed_for_download: false
+    downloader_type: manual
+    manual_instructions: >
+      1. Visit http://vis-www.cs.umass.edu/lfw/
+      2. Download lfw.tgz (173MB)
+      3. Place in data/raw/lfw/
+    expected_format: "jpg (250x250)"
+    local_target_dir: "data/raw/lfw"
+    expected_count: 13233
+    usage_notes: >
+      Use for evaluation/benchmarking only, NOT primary training.
+      No explicit open license. Research use implied.
+      MANUAL_REVIEW_REQUIRED.
+
+  - name: imdb_wiki
+    display_name: "IMDB-WIKI Age/Gender Dataset"
+    source_url: "https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/"
+    license: "Research use only"
+    commercial_use_allowed: false
+    redistribution_allowed: false
+    allowed_for_download: false
+    downloader_type: manual
+    manual_instructions: >
+      1. Visit https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/
+      2. Download imdb_crop.tar or wiki_crop.tar
+      3. Place in data/raw/imdb_wiki/
+    expected_format: "jpg (variable)"
+    local_target_dir: "data/raw/imdb_wiki"
+    expected_count: 524230
+    usage_notes: >
+      Very noisy — many group photos, low quality, non-portrait.
+      Quality filter aggressively before use.
+      Research only. MANUAL_REVIEW_REQUIRED.

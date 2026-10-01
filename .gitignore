@@ -1,0 +1,82 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+__pycache__
+*.pyc
+*.pyo
+.venv
+venv/
+env/
+
+# Build outputs
+.next
+dist
+build
+*.egg-info
+.eggs
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Turbo
+.turbo
+
+# Testing
+coverage
+.pytest_cache
+htmlcov
+
+# Editor
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Python
+*.pyc
+*.pyd
+*.so
+*.pyd
+
+# Generated
+alembic/versions/*.pyc
+
+# S3/Storage local
+uploads/
+media/
+
+# Local tooling + data
+.tools/
+apps/api/.data/
+node_modules/
+__pycache__/
+.venv/
+xcuserdata/
+DerivedData/
+build/
+*.xcuserstate
+.idea/
+.vscode/
+.playwright-mcp/
+.turbo/

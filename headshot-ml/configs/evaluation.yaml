@@ -1,0 +1,62 @@
+evaluation:
+  checkpoint: "artifacts/checkpoints/best.pth"
+
+  metrics:
+    quality_score:
+      - mae
+      - mse
+      - pearson_correlation
+      - spearman_correlation
+
+    face_embeddings:
+      - cosine_similarity
+      - euclidean_distance
+      - rank_1_accuracy           # Identity retrieval
+
+    dataset_balance:
+      - source_distribution
+      - quality_score_histogram
+      - brightness_distribution
+      - blur_score_distribution
+
+  visualization:
+    enabled: true
+    output_dir: "artifacts/eval_plots"
+    top_k_best: 20
+    top_k_worst: 20
+    confusion_matrix: false       # For attribute classification
+
+  identity_eval:
+    enabled: false                # Requires paired images of same person
+    embedding_model: "insightface"
+    threshold: 0.5                # Cosine similarity threshold
+
+  report:
+    output_dir: "artifacts/reports"
+    formats: ["html", "json"]
+    include_sample_images: true
+    samples_per_class: 10
+
+preprocessing:
+  face_detector: "retinaface"     # retinaface | mtcnn | opencv_haar
+  min_face_size: 80               # pixels
+  face_confidence_threshold: 0.9
+  align_landmarks: true
+  alignment_method: "similarity"  # similarity | affine
+
+  crop:
+    strategy: "portrait"          # portrait | square | face_only
+    portrait_ratio: "3:4"
+    padding_factor: 1.5           # how much context around face
+    output_size: 512
+
+quality_filters:
+  blur_threshold: 50.0            # Laplacian variance — below = too blurry
+  brightness_min: 40.0            # 0-255
+  brightness_max: 215.0
+  face_area_ratio_min: 0.05       # face must cover at least 5% of image
+  face_area_ratio_max: 0.95       # reject if face covers >95% (too close)
+  max_faces: 1                    # reject multi-face images
+  min_resolution: 128             # minimum dimension in pixels
+  max_pose_yaw_deg: 45.0          # reject extreme side profiles
+  max_pose_pitch_deg: 30.0
